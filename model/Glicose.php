@@ -73,13 +73,12 @@
 }
 
 
-function buscarTodosRegistros() {
+function buscarTodosRegistros($id_usuario) {
       
-    $sql = "SELECT * FROM registros_glicose ORDER BY id DESC";
+    $sql = "SELECT * FROM registros_glicose WHERE id_usuario = '$id_usuario' ORDER BY id DESC;";
     $conexao = $this->conectarBanco();
     $resultado = $conexao->query($sql);
     return $resultado;
-
 
 }
 }

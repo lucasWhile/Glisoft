@@ -1,8 +1,8 @@
 <?php
 include_once '../model/Glicose.php';
-$glicose = new Glicose('', "", "", '');
-
-$dados=$glicose->buscarTodosRegistros();
+$glicose = new Glicose('', "", "", '','');
+session_start();
+$dados=$glicose->buscarTodosRegistros( $_SESSION["id_usuario"]);
 ?>
 
 <!doctype html>
