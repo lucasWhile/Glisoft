@@ -47,7 +47,7 @@ class Usuario
 
             $_SESSION["id_usuario"] = $dados["id_usuario"];
 
-            $_SESSION["nome"] = $dados["id"];
+            $_SESSION["nome"] = $dados["nome"];
             $_SESSION["email"] = $dados["email"];
             $_SESSION["nivel"] = $dados["nivel"];
 

@@ -60,17 +60,28 @@
         }
     }
 
-    function buscarUltimosRegistros() {
-      
-        $sql = "SELECT * FROM registros_glicose ORDER BY id DESC LIMIT 3";
-    
+    function buscarUltimosRegistros($id_usuario) { 
+        
+        $sql = "SELECT * FROM registros_glicose WHERE id_usuario = '$id_usuario' ORDER BY id DESC LIMIT 3";
  
         $conexao = $this->conectarBanco();
         $resultado = $conexao->query($sql);
         return $resultado;
 
+}
+
+
+function mediaGlicose($id_usuario) { 
+        
+    $sql = "SELECT AVG(glicose_registro) AS media_glicose FROM registros_glicose WHERE id_usuario = '$id_usuario' ORDER BY id DESC LIMIT 5";
+
+    $conexao = $this->conectarBanco();
+    $resultado = $conexao->query($sql);
+    $row = $resultado->fetch_assoc();
+    return $row['media_glicose'];;
 
 }
+
 
 
 function buscarTodosRegistros($id_usuario) {

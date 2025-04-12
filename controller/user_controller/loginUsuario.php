@@ -16,6 +16,8 @@ if($usuario->login()){
 }
 else{
     echo "não logado";
+    $_SESSION['msg']='não logado,tente novamente';
+    header('Location: ../../view/usuario/loginUsuario.php');
 }
 
 ?>
