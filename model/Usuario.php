@@ -17,6 +17,8 @@ class Usuario
     public function   conectarBanco(){
         $conexao = new mysqli('localhost', 'root', '', 'glisoft');
 
+     //   $conexao = new mysqli('sql101.infinityfree.com', 'if0_38541035', 'K9728wuxY8', 'if0_38541035_glisoft');
+
         // Verifica erros de conexão
         if ($conexao->connect_error) {
             die("Erro ao conectar ao MySQL: " . $conexao->connect_error);
@@ -38,26 +40,46 @@ class Usuario
 
     public function login() {
 
+        // Conectar ao banco de dados
         $conexao = $this->conectarBanco();
-        $sql = "SELECT * FROM usuario WHERE email='$this->email' AND senha='$this->senha'";
-        $result = $conexao->query($sql);
-        print_r($result);
+    
+        // Prevenir SQL Injection utilizando Prepared Statements
+        $sql = "SELECT * FROM usuario WHERE email = ? AND senha = ?";
+        $stmt = $conexao->prepare($sql);
+    
+        // Verificar se a preparação da query foi bem-sucedida
+        if ($stmt === false) {
+            return false;
+        }
+    
+        // Vincular os parâmetros
+        $stmt->bind_param("ss", $this->email, $this->senha);
+    
+        // Executar a query
+        $stmt->execute();
+        $result = $stmt->get_result();
+    
+        // Verificar se o usuário foi encontrado
         if ($result->num_rows > 0) {
-            $dados=$result->fetch_assoc();
-
+            $dados = $result->fetch_assoc();
+    
+            // Iniciar a sessão e armazenar os dados do usuário
             $_SESSION["id_usuario"] = $dados["id_usuario"];
-
             $_SESSION["nome"] = $dados["nome"];
             $_SESSION["email"] = $dados["email"];
             $_SESSION["nivel"] = $dados["nivel"];
-
-
+    
+            // Fechar a declaração
+            $stmt->close();
+    
             return true;
         } else {
+            // Caso o login não seja bem-sucedido
+            $stmt->close();
             return false;
         }
-        
     }
+    
 
 
     public function logout() {

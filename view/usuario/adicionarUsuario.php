@@ -62,13 +62,20 @@
                                 <input type="password" class="form-control" id="exampleInputPassword1" name="senha" placeholder="Digite sua senha" required>
                             </div>
 
+                            <div class="d-grid mb-2">
+                            <button type="submit" class="btn btn-custom">Criar Conta</button>
+                           </div>
+
                             <div class="d-grid">
-                                <button type="submit" class="btn btn-custom">Criar Conta</button>
+                                <a href="loginUsuario.php" class="btn btn-custom" role="button">Voltar</a>
                             </div>
+
 
                             <input type="hidden" id="nivel" name="nivel" value="usuario">
                         </form>
+                   
                     </div>
+                 
                     <div class="card-footer text-center">
                         <small class="text-muted">Todos os campos são obrigatórios.</small>
                     </div>

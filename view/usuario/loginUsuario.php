@@ -85,7 +85,8 @@ session_start();
                         </form>
                     </div>
                     <div class="card-footer text-center">
-                        <small class="text-muted">Todos os campos são obrigatórios.</small>
+                       <small class="text-muted">Todos os campos são obrigatórios.</small> <br>    
+                         <small class="text-muted">Versão 0.01</small>
                     </div>
                 </div>
             </div>
