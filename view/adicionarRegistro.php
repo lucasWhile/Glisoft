@@ -101,9 +101,43 @@
                         </div>
                     </div>
 
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="checkDefault">
+            <label class="form-check-label" for="checkDefault">
+                Correção?
+            </label>
+        </div>
+
+        <div id="insulinaFields" style="display: none;">
+            <label for="unidades">Quantas unidades?</label>
+            <input type="number" id="unidades" name="unidades" placeholder="Digite as unidades">
+            <br>
+            <label for="tipoInsulina">Qual tipo de insulina?</label>
+            <select class="form-select" aria-label="Default select example">
+            <option selected>Open this select menu</option>
+            <option value="1">One</option>
+            <option value="2">Two</option>
+            <option value="3">Three</option>
+            </select>
+        </div>
+
+        <script>
+            document.getElementById('checkDefault').addEventListener('change', function() {
+                var insulinaFields = document.getElementById('insulinaFields');
+                if (this.checked) {
+                    insulinaFields.style.display = 'block'; // Exibe os campos
+                } else {
+                    insulinaFields.style.display = 'none'; // Esconde os campos
+                }
+            });
+</script>
+
+
                     <div class="d-flex justify-content-end">
                         <button type="submit" class="btn btn-custom">Registrar</button>
                     </div>
+
+                  
                 </form>   
                 <div class="d-flex justify-content-start">
                         <a href="index.php" class="btn btn-custom ">Voltar</a>
