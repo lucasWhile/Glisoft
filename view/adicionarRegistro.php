@@ -1,3 +1,13 @@
+<?php
+
+include_once '../model/Insulina.php';
+$insulina= new insulina('','','','');
+session_start();
+$id_usuario= $_SESSION["id_usuario"];
+ $dados= $insulina->buscardadosinsulina($id_usuario);
+
+?>
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -96,13 +106,13 @@
                     <div class="mb-3">
                         <label for="inputGlicose" class="form-label">Qual o valor da sua glicose?</label>
                         <div class="input-group">
-                            <input type="number" class="form-control" id="inputGlicose" name="inputGlicose" placeholder="Insira o valor" autocomplete="off" min="0" max="1000">
+                            <input type="number" class="form-control" id="inputGlicose" name="inputGlicose" placeholder="Insira o valor" autocomplete="off" min="0" max="1000" required>
                             <span class="input-group-text">mg/dL</span>
                         </div>
                     </div>
 
         <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="" id="checkDefault">
+            <input class="form-check-input" type="checkbox" value="ckeckInsulina" name="checkInsulina" id="checkDefault">
             <label class="form-check-label" for="checkDefault">
                 Correção?
             </label>
@@ -113,11 +123,15 @@
             <input type="number" id="unidades" name="unidades" placeholder="Digite as unidades">
             <br>
             <label for="tipoInsulina">Qual tipo de insulina?</label>
-            <select class="form-select" aria-label="Default select example">
-            <option selected>Open this select menu</option>
-            <option value="1">One</option>
-            <option value="2">Two</option>
-            <option value="3">Three</option>
+            <select class="form-select" name="id_insulina" aria-label="Default select example">
+            <option selected>Selecione a insulina</option>
+
+            <?php while ($dado = $dados->fetch_assoc()) { 
+        ?>
+            <option value="<?php echo $dado['id_insulina'] ?>"><?php echo $dado['tipo_insulina']  ?></option>
+
+        <?php } ?>
+       
             </select>
         </div>
 
@@ -130,7 +144,7 @@
                     insulinaFields.style.display = 'none'; // Esconde os campos
                 }
             });
-</script>
+        </script>
 
 
                     <div class="d-flex justify-content-end">

@@ -53,20 +53,32 @@ $media=$glicose->mediaGlicose($id_usuario);
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
-          <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-              <li class="nav-item">
-                <a class="nav-link active text-white" href="historicoRegistro.php">Histórico</a>
-              </li>
-              
-              
-              <?php if (isset($_SESSION['nivel'])) { ?>
-                <li class="nav-item">
-                  <a class="nav-link text-white" href="../controller/user_controller/logoutUsuario.php">Sair</a>
+       <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link active text-white" href="historicoRegistro.php">Histórico</a>
+            </li>
+            
+            <!-- Dropdown de Configurações -->
+                <li class="nav-item dropdown">
+                  <a class="nav-link text-white" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Configurações essenciais
+                  </a>
+                  <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <li><a class="dropdown-item" href="../view/insulina/adicionarInsulina.php">Adicionar Insulina</a></li>
+                  <!--  <li><a class="dropdown-item" href="#">Fuso Horario</a></li>  -->
+               <!--       <li><a class="dropdown-item" href="#">Configuração 3</a></li>  -->
+                  </ul>
                 </li>
-              <?php } ?>
-            </ul>
-          </div>
+
+                <?php if (isset($_SESSION['nivel'])) { ?>
+                  <li class="nav-item">
+                    <a class="nav-link text-white" href="../controller/user_controller/logoutUsuario.php">Sair</a>
+                  </li>
+                <?php } ?>
+              </ul>
+      </div>
+
         </div>
     </nav>
 
@@ -88,6 +100,7 @@ $media=$glicose->mediaGlicose($id_usuario);
                         <th scope="col">Hora</th>
                         <th scope="col">Glicose</th>
                         <th scope="col">Status</th>
+                        <th scope="col">Correção?/unidades</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -97,6 +110,18 @@ $media=$glicose->mediaGlicose($id_usuario);
                       <td><?php echo date('H:i', strtotime($dado['hora'])); ?></td>
                         <td><?php echo $dado['glicose_registro']; ?></td>
                         <td><?php echo $dado['status']; ?></td>
+                        <td> <?php 
+                        if (isset($dado['quantidade_unidades'])) {    ?>
+                           <?php echo $dado['quantidade_unidades']; ?>
+                       <?php }
+                       else{?>
+                       Não
+
+                    <?php   }
+                        ?>
+                          
+                      </td>
+
                       </tr>
                     <?php } ?>
                     </tbody>

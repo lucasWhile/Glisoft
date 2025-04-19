@@ -1,8 +1,8 @@
 <?php
 include_once '../model/Glicose.php';
-$glicose = new Glicose('', "", "", '','');
+$glicose = new Glicose('', "", "", '', '');
 session_start();
-$dados = $glicose->buscarTodosRegistros($_SESSION["id_usuario"]);
+$dados = $glicose->buscarTotalInsulina($_SESSION["id_usuario"]);
 ?>
 
 <!doctype html>
@@ -76,19 +76,10 @@ $dados = $glicose->buscarTodosRegistros($_SESSION["id_usuario"]);
       </div>
     </nav>
 
-    <div class="container">
-      <div class="row">
-        <div class="col-2">
-        <a  href="historico_total_insulina_dia.php" class="btn btn-secondary">Total Insulina / Data</a>
-
-        </div>
-      </div>
-    </div>
-
     <!-- Conteúdo -->
     <div class="container">
       <div class="d-flex justify-content-between align-items-center mb-3">
-        <h4 class="mb-0">Histórico de Glicose</h4>
+        <h4 class="mb-0">Total de Insulina Tomada por Dia</h4>
         <a href="index.php" class="btn btn-custom">Voltar</a>
       </div>
 
@@ -97,31 +88,16 @@ $dados = $glicose->buscarTodosRegistros($_SESSION["id_usuario"]);
           <thead>
             <tr>
               <th scope="col">Data</th>
-              <th scope="col">Hora</th>
-              <th scope="col">Glicose</th>
-              <th scope="col">Status</th>
-              <th scope="col">Correção?/unidades</th>
+              <th scope="col">Total de Insulina Tomada (unidades)</th>
             </tr>
           </thead>
           <tbody>
             <?php while ($dado = $dados->fetch_assoc()) { ?>
               <tr>
-                <td><?= date('d/m/Y', strtotime($dado['data'])); ?></td>
-                <td><?= date('H:i', strtotime($dado['hora'])); ?></td>
-                <td><?= $dado['glicose_registro']; ?></td>
-                <td><?= $dado['status']; ?></td>
+              <td><?= date('d/m/Y', strtotime($dado['data'])); ?></td>
+              <td><?= !empty($dado['total_unidades']) ? $dado['total_unidades'] : 'Não'; ?></td>
+            </tr>
 
-                <td> <?php 
-                        if (isset($dado['quantidade_unidades'])) {    ?>
-                           <?php echo $dado['quantidade_unidades']; ?>
-                       <?php }
-                       else{?>
-                       Não
-
-                    <?php   }
-                        ?>
-                </td>
-              </tr>
             <?php } ?>
           </tbody>
         </table>

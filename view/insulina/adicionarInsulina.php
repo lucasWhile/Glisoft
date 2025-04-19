@@ -5,7 +5,7 @@ $insulina= new insulina('','','','');
 session_start();
 $id_usuario= $_SESSION["id_usuario"];
  $dados= $insulina->buscardadosinsulina($id_usuario);
- print_r($dados);
+
 ?>
 <!doctype html>
 <html lang="en">
