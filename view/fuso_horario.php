@@ -104,28 +104,32 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-      // Função para calcular e exibir a hora com base no fuso horário selecionado
-      function mostrarHora() {
-        const fusoHorario = document.getElementById('fuso_horario').value.trim();
-        const resultadoElemento = document.getElementById('horaExibida');
+  let intervaloRelogio; // Variável para controlar o intervalo
 
-        if (fusoHorario) {
-          // Extrai o offset de hora (exemplo: UTC-3)
-          const fusoOffset = parseInt(fusoHorario.match(/([+-]?\d+)/)[0]);
+  function mostrarHora() {
+    const fusoHorario = document.getElementById('fuso_horario').value.trim();
+    const resultadoElemento = document.getElementById('horaExibida');
 
-          // Obtém a hora atual
-          const dataAtual = new Date();
+    // Se já existir um intervalo rodando, limpar ele
+    if (intervaloRelogio) {
+      clearInterval(intervaloRelogio);
+    }
 
-          // Ajusta a hora conforme o fuso horário
-          dataAtual.setHours(dataAtual.getHours() + fusoOffset);
+    if (fusoHorario) {
+      const fusoOffset = parseInt(fusoHorario.match(/([+-]?\d+)/)[0]);
 
-          // Exibe a hora ajustada
-          resultadoElemento.textContent = `A hora em ${fusoHorario} é: ${dataAtual.toLocaleString()}`;
-        } else {
-          // Caso não tenha sido selecionado um fuso horário
-          resultadoElemento.textContent = 'Por favor, selecione um fuso horário válido.';
-        }
-      }
-    </script>
+      // Atualizar a hora a cada segundo
+      intervaloRelogio = setInterval(() => {
+        const dataAtual = new Date();
+        dataAtual.setHours(dataAtual.getUTCHours() + fusoOffset);
+
+        resultadoElemento.textContent = `Hora no fuso ${fusoHorario}: ${dataAtual.toLocaleTimeString()}`;
+      }, 1000);
+    } else {
+      resultadoElemento.textContent = 'Por favor, selecione um fuso horário válido.';
+    }
+  }
+</script>
+
   </body>
 </html>

@@ -1,7 +1,5 @@
 <?php
-include_once 'banco.php';
-class insulina extends banco
-
+class insulina 
 {
    public  $id_insulina;
    public  $tipo_insulina;
@@ -17,6 +15,7 @@ class insulina extends banco
    }
 
    
+
 
 
 public function adicicionarRegistroInsulina(){

@@ -1,10 +1,13 @@
 <?php
-include_once '../model/Glicose.php';
 session_start();
+include_once '../model/Glicose.php';
+include_once 'seguranca/verificadorsessao.php';
+
 $glicose = new Glicose('', "", "", '','');
 $id_usuario=$_SESSION["id_usuario"];
 $dados=$glicose->buscarUltimosRegistros($id_usuario);
 $media=$glicose->mediaGlicose($id_usuario);
+
 ?>
 
 <!doctype html>
@@ -13,6 +16,8 @@ $media=$glicose->mediaGlicose($id_usuario);
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Tela Inicial - Glisoft</title>
+
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <style>
@@ -93,14 +98,14 @@ $media=$glicose->mediaGlicose($id_usuario);
             <div class=" col-md-9">
           
 
-                <table class="table table-bordered table-striped">
+                <table class="table  table-sm table-bordered table-striped">
                     <thead>
                       <tr>
                         <th scope="col">Data</th>
                         <th scope="col">Hora</th>
                         <th scope="col">Glicose</th>
                         <th scope="col">Status</th>
-                        <th scope="col">Correção?/unidades</th>
+                        <th scope="col">Correção?</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -112,7 +117,7 @@ $media=$glicose->mediaGlicose($id_usuario);
                         <td><?php echo $dado['status']; ?></td>
                         <td> <?php 
                         if (isset($dado['quantidade_unidades'])) {    ?>
-                           <?php echo $dado['quantidade_unidades']; ?>
+                           <?php echo $dado['quantidade_unidades'] .' uni-'.$dado['tipo_insulina']; ?>
                        <?php }
                        else{?>
                        Não
@@ -126,6 +131,9 @@ $media=$glicose->mediaGlicose($id_usuario);
                     <?php } ?>
                     </tbody>
                 </table>
+
+
+              
             </div>
 
             <div class="col-md-3 d-flex justify-content-center align-items-center">

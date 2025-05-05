@@ -1,5 +1,6 @@
 <?php
-class Usuario 
+include_once 'banco.php';
+class Usuario extends banco
 {
     private $nome;
     private $email;
@@ -14,19 +15,7 @@ class Usuario
         $this->nivel = $nivel;
     }
 
-    public function   conectarBanco(){
-        $conexao = new mysqli('localhost', 'root', '', 'glisoft');
-
-   
-
-        // Verifica erros de conexão
-        if ($conexao->connect_error) {
-            die("Erro ao conectar ao MySQL: " . $conexao->connect_error);
-        }
-    
-        // Retorna a conexão se for bem-sucedida
-        return $conexao;
-    }
+ 
 
     public function adicionarUsuario(){
         $conexao = $this->conectarBanco();
@@ -39,46 +28,47 @@ class Usuario
     }
 
     public function login() {
-
         // Conectar ao banco de dados
         $conexao = $this->conectarBanco();
     
-        // Prevenir SQL Injection utilizando Prepared Statements
-        $sql = "SELECT * FROM usuario WHERE email = ? AND senha = ?";
+        // Buscar só pelo email
+        $sql = "SELECT id_usuario, nome, email, senha, nivel FROM usuario WHERE email = ?";
         $stmt = $conexao->prepare($sql);
     
-        // Verificar se a preparação da query foi bem-sucedida
         if ($stmt === false) {
             return false;
         }
     
-        // Vincular os parâmetros
-        $stmt->bind_param("ss", $this->email, $this->senha);
+        // Vincular o email
+        $stmt->bind_param("s", $this->email);
     
-        // Executar a query
+        // Executar
         $stmt->execute();
-        $result = $stmt->get_result();
     
-        // Verificar se o usuário foi encontrado
-        if ($result->num_rows > 0) {
-            $dados = $result->fetch_assoc();
+        // Vincular o resultado nas variáveis
+        $stmt->bind_result($id_usuario, $nome, $email, $senhaBanco, $nivel);
     
-            // Iniciar a sessão e armazenar os dados do usuário
-            $_SESSION["id_usuario"] = $dados["id_usuario"];
-            $_SESSION["nome"] = $dados["nome"];
-            $_SESSION["email"] = $dados["email"];
-            $_SESSION["nivel"] = $dados["nivel"];
+        // Buscar os dados
+        if ($stmt->fetch()) {
+            // Agora validar a senha
+            if (password_verify($this->senha, $senhaBanco)) {
+                // Senha correta, criar sessão
+                $_SESSION["id_usuario"] = $id_usuario;
+                $_SESSION["nome"] = $nome;
+                $_SESSION["email"] = $email;
+                $_SESSION["nivel"] = $nivel;
+                echo   'logou0;';
     
-            // Fechar a declaração
-            $stmt->close();
-    
-            return true;
-        } else {
-            // Caso o login não seja bem-sucedido
-            $stmt->close();
-            return false;
+                $stmt->close();
+                return true;
+            }
         }
+    
+        $stmt->close();
+        return false;
     }
+    
+    
     
 
 

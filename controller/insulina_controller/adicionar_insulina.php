@@ -9,7 +9,7 @@ $insulina= new insulina($tipoInsulina,$marca,true,$id_usuario);
 
  if($insulina->adicicionarRegistroInsulina()==true){
     $_SESSION['msg']='insulina: '. $tipoInsulina . ' adicionar com sucesso';
-    header("Location:../../view/insulina/adicionarinsulina.php");
+    header("Location:../../view/insulina/adicionarInsulina.php");
  }
  else{
 

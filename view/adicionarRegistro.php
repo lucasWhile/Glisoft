@@ -117,23 +117,38 @@ $id_usuario= $_SESSION["id_usuario"];
                 Correção?
             </label>
         </div>
+        <input type="hidden" id="horaCliente" name="horaCliente">
 
-        <div id="insulinaFields" style="display: none;">
-            <label for="unidades">Quantas unidades?</label>
-            <input type="number" id="unidades" name="unidades" placeholder="Digite as unidades">
-            <br>
-            <label for="tipoInsulina">Qual tipo de insulina?</label>
-            <select class="form-select" name="id_insulina" aria-label="Default select example">
+<div id="insulinaFields" style="display: none;">
+    <label for="tipoInsulina">Qual tipo de insulina?</label>
+
+    <?php if ($dados->num_rows > 0) { ?>
+        <select class="form-select" name="id_insulina" aria-label="Default select example">
             <option selected>Selecione a insulina</option>
+            <?php while ($dado = $dados->fetch_assoc()) { ?>
+                <option value="<?php echo $dado['id_insulina']; ?>">
+                    <?php echo $dado['tipo_insulina']; ?>
+                </option>
+            <?php } ?>
+        </select>
 
-            <?php while ($dado = $dados->fetch_assoc()) { 
-        ?>
-            <option value="<?php echo $dado['id_insulina'] ?>"><?php echo $dado['tipo_insulina']  ?></option>
+        <br>
 
-        <?php } ?>
-       
-            </select>
+        <label for="unidades">Quantas unidades?</label>
+        <input type="number" id="unidades" name="unidades" placeholder="Digite as unidades">
+    <?php } else { ?>
+        <select class="form-select" disabled>
+            <option>Nenhuma insulina disponível</option>
+        </select>
+
+        <div class="alert alert-warning mt-2" role="alert">
+            Nenhuma insulina cadastrada. Por favor,
+            <a href="../view/insulina/adicionarInsulina.php" class="alert-link">cadastre uma insulina</a> primeiro.
         </div>
+    <?php } ?>
+</div>
+
+
 
         <script>
             document.getElementById('checkDefault').addEventListener('change', function() {
@@ -145,6 +160,25 @@ $id_usuario= $_SESSION["id_usuario"];
                 }
             });
         </script>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var agora = new Date();
+        
+        var ano = agora.getFullYear();
+        var mes = String(agora.getMonth() + 1).padStart(2, '0');
+        var dia = String(agora.getDate()).padStart(2, '0');
+        var hora = String(agora.getHours()).padStart(2, '0');
+        var minuto = String(agora.getMinutes()).padStart(2, '0');
+        var segundo = String(agora.getSeconds()).padStart(2, '0');
+
+        var horarioCliente = `${ano}-${mes}-${dia} ${hora}:${minuto}:${segundo}`;
+
+        document.getElementById('horaCliente').value = horarioCliente;
+        console.log(horarioCliente)
+    });
+</script>
 
 
                     <div class="d-flex justify-content-end">

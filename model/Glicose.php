@@ -1,5 +1,6 @@
 <?php
- class Glicose
+include_once 'banco.php';
+ class Glicose extends banco
 {
     private $data;
     private $hora;
@@ -22,19 +23,6 @@
 
 
 
-    public function   conectarBanco(){
-        $conexao = new mysqli('localhost', 'root', '', 'glisoft');
-
-
-
-        // Verifica erros de conexão
-        if ($conexao->connect_error) {
-            die("Erro ao conectar ao MySQL: " . $conexao->connect_error);
-        }
-    
-        // Retorna a conexão se for bem-sucedida
-        return $conexao;
-    }
 
 
     
@@ -61,9 +49,7 @@
         
     }
     public function adicicionarRegistro(){
-        date_default_timezone_set('America/Campo_Grande');
-        $this->data = date('Y-m-d');
-        $this->hora = date('H:i:s');
+     
         $conexao = $this->conectarBanco();
         $sql = "INSERT INTO registros_glicose (data, hora, glicose_registro, status, id_usuario) VALUES ('$this->data', '$this->hora', '$this->glicose_registro', '$this->status','$this->id_usuario')";
         if ($conexao->query($sql) === TRUE) {
@@ -88,7 +74,7 @@
     function buscarUltimosRegistros($id_usuario) { 
         
         $sql = "SELECT registros_glicose.data as data , registros_glicose.hora as hora, registros_glicose.glicose_registro 
-        as glicose_registro, registros_glicose.status as status, registro_correcao.quantidade_unidades as quantidade_unidades
+        as glicose_registro, registros_glicose.status as status, registro_correcao.quantidade_unidades as quantidade_unidades, insulina.tipo_insulina as tipo_insulina
 FROM registros_glicose 
 LEFT JOIN registro_correcao 
     ON registro_correcao.id_registro_glicose = registros_glicose.id 
