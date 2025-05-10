@@ -5,6 +5,7 @@ include_once '../../model/Usuario.php';
 $email=$_POST['email'];
 $senha=$_POST['senha'];
 
+
 $usuario = new Usuario('', $email, $senha,'');
 
 
@@ -16,6 +17,8 @@ if($usuario->login()){
 }
 else{
     echo "não logado";
+    $_SESSION['msg']='não logado,tente novamente';
+    header('Location: ../../view/usuario/loginUsuario.php');
 }
 
 ?>

@@ -1,5 +1,6 @@
 <?php
-class Usuario 
+include_once 'banco.php';
+class Usuario extends banco
 {
     private $nome;
     private $email;
@@ -14,17 +15,7 @@ class Usuario
         $this->nivel = $nivel;
     }
 
-    public function   conectarBanco(){
-        $conexao = new mysqli('localhost', 'root', '', 'glisoft');
-
-        // Verifica erros de conexão
-        if ($conexao->connect_error) {
-            die("Erro ao conectar ao MySQL: " . $conexao->connect_error);
-        }
-    
-        // Retorna a conexão se for bem-sucedida
-        return $conexao;
-    }
+ 
 
     public function adicionarUsuario(){
         $conexao = $this->conectarBanco();
@@ -37,27 +28,48 @@ class Usuario
     }
 
     public function login() {
-
+        // Conectar ao banco de dados
         $conexao = $this->conectarBanco();
-        $sql = "SELECT * FROM usuario WHERE email='$this->email' AND senha='$this->senha'";
-        $result = $conexao->query($sql);
-        print_r($result);
-        if ($result->num_rows > 0) {
-            $dados=$result->fetch_assoc();
-
-            $_SESSION["id_usuario"] = $dados["id_usuario"];
-
-            $_SESSION["nome"] = $dados["id"];
-            $_SESSION["email"] = $dados["email"];
-            $_SESSION["nivel"] = $dados["nivel"];
-
-
-            return true;
-        } else {
+    
+        // Buscar só pelo email
+        $sql = "SELECT id_usuario, nome, email, senha, nivel FROM usuario WHERE email = ?";
+        $stmt = $conexao->prepare($sql);
+    
+        if ($stmt === false) {
             return false;
         }
-        
+    
+        // Vincular o email
+        $stmt->bind_param("s", $this->email);
+    
+        // Executar
+        $stmt->execute();
+    
+        // Vincular o resultado nas variáveis
+        $stmt->bind_result($id_usuario, $nome, $email, $senhaBanco, $nivel);
+    
+        // Buscar os dados
+        if ($stmt->fetch()) {
+            // Agora validar a senha
+            if (password_verify($this->senha, $senhaBanco)) {
+                // Senha correta, criar sessão
+                $_SESSION["id_usuario"] = $id_usuario;
+                $_SESSION["nome"] = $nome;
+                $_SESSION["email"] = $email;
+                $_SESSION["nivel"] = $nivel;
+                echo   'logou0;';
+    
+                $stmt->close();
+                return true;
+            }
+        }
+    
+        $stmt->close();
+        return false;
     }
+    
+    
+    
 
 
     public function logout() {
